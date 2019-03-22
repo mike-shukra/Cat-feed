@@ -19,11 +19,11 @@ void setup() {
   pinMode(MOSFET_pin, OUTPUT); // пин реле как выход
   
   my_timer = millis();   // "сбросить" таймер
-  Serial.begin(9600); //test последовательный порт для отображения данных
+  //Serial.begin(9600); //test последовательный порт для отображения данных
 
-  Serial.println("setup"); 
+  //Serial.println("setup"); 
 
-  Serial.println("open MOSFET");  
+  //Serial.println("open MOSFET");  
   digitalWrite(MOSFET_pin, 1);    // подаём сигнал на пин мосфета
   delay(1000);
 
@@ -31,7 +31,7 @@ void setup() {
   delay(1000);
 
   digitalWrite(MOSFET_pin, 0);    // подаём сигнал на пин мосфета
-  Serial.println("close MOSFET");  
+  //Serial.println("close MOSFET");  
   delay(1000);  
    
 }
@@ -42,7 +42,7 @@ void loop() {
     
       // набор функций, который хотим выполнить один раз за период
  
-	  Serial.println("open MOSFET");  
+	  //Serial.println("open MOSFET");  
 	  digitalWrite(MOSFET_pin, 1);    // подаём сигнал на пин мосфета
 	  delay(1000);
 
@@ -50,7 +50,7 @@ void loop() {
 	  delay(1000);
 
 	  digitalWrite(MOSFET_pin, 0);    // подаём сигнал на пин мосфета
-	  Serial.println("close MOSFET");  
+	  //Serial.println("close MOSFET");  
 	  delay(1000);  
    
   }
@@ -61,7 +61,7 @@ void loop() {
 
 // open function //функция открытия крышки
 void Open() {
-  Serial.println("function start");  
+  //Serial.println("function start");  
 
   servo1.attach(servoPIN); // подкючаем сервопривод
   int pos; // position/ положение сервы
@@ -101,6 +101,6 @@ void Open() {
     delay(1500); // пауза перед расслаблением
 
     servo1.detach(); //отключаем сервопривод
-    Serial.println("function stop");  
+    //Serial.println("function stop");  
 
 }
