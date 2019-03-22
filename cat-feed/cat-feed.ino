@@ -12,8 +12,8 @@ unsigned long period_time = (long)3*60*60*1000; //2*60*60*1000
 unsigned long my_timer;
 
 int Y0=0; // close angle /угол сервы в закрытом положении
-int Y1=25; // close angle /угол сервы в открытом положении
-int t=100; // delay for shake mode /приостановка в промежуточных положениях при открытии, мс (режим тряски)
+int Y1=20; // close angle /угол сервы в открытом положении
+int t=50; // delay for shake mode /приостановка в промежуточных положениях при открытии, мс (режим тряски)
  
 void setup() {
   pinMode(MOSFET_pin, OUTPUT); // пин реле как выход
