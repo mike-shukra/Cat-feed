@@ -12,14 +12,18 @@ int servoPIN = 6;     //контакт сервопривода
 int MOSFET_pin = 3;   // пин мосфета
 
 // время между открытиями в мс = 12ч*60мин*60сек*1000
-unsigned long period_time = (long)10000; //3*60*60*1000
+unsigned long period_time = (long)3*60*60*1000; //3*60*60*1000
 // переменная таймера, максимально большой целочисленный тип (он же uint32_t)
 unsigned long my_timer;
+
+unsigned long timing; // Пауза
 
 int Y0=0; //угол сервы в закрытом положении
 int Y1=20; //угол сервы в открытом положении
 int t=50; //приостановка в промежуточных положениях при открытии, мс (режим тряски)
- 
+
+int hourNow;
+
 void setup() {
   Serial.begin(9600); //test последовательный порт для отображения данных
   delay(3000); // wait for console opening
@@ -49,25 +53,25 @@ void setup() {
 }
  
 void loop() {
-  DateTime now = rtc.now();
-  int hourNow;
-  hourNow = now.hour(), DEC;
-  Serial.println(hourNow);
-  if (hourNow < 15) {
-    delay (3*60000);
-  }
-  else{
+  // Пауза
+  if (millis() - timing > (long)30*60*1000){  
+    timing = millis(); 
+    DateTime now = rtc.now();
+    
+    hourNow = now.hour(), DEC;
+    Serial.println(hourNow);
+  
+    if (hourNow > 6) {
       if ((long)millis() - my_timer > period_time) {
-    my_timer = millis();   // "сбросить" таймер
+        my_timer = millis();   // "сбросить" таймер
+        // набор функций, который хотим выполнить один раз за период
 
-    // набор функций, который хотим выполнить один раз за период
-
-    Open () ;// Функция открытия крышки
-    delay(1000);
-
-     
+        Open () ;// Функция открытия крышки
+        delay(1000);
+      }
     }
   }
+ 
 
   delay(1000);
 
