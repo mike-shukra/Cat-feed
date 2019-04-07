@@ -16,7 +16,8 @@ unsigned long period_time = (long)3*60*60*1000; //3*60*60*1000
 // переменная таймера, максимально большой целочисленный тип (он же uint32_t)
 unsigned long my_timer;
 
-unsigned long timing; // Пауза
+unsigned long my_timing; // Пауза
+unsigned long period_timing = (long)30*60*1000; //3*60*60*1000
 
 int Y0=0; //угол сервы в закрытом положении
 int Y1=20; //угол сервы в открытом положении
@@ -46,6 +47,22 @@ void setup() {
   my_timer = millis();   // "сбросить" таймер
 
   Serial.println("setup"); 
+  DateTime now = rtc.now();
+    
+  Serial.print(now.year(), DEC);
+  Serial.print('/');
+  Serial.print(now.month(), DEC);
+  Serial.print('/');
+  Serial.print(now.day(), DEC);
+  Serial.print(" (");
+  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
+  Serial.print(") ");
+  Serial.print(now.hour(), DEC);
+  Serial.print(':');
+  Serial.print(now.minute(), DEC);
+  Serial.print(':');
+  Serial.print(now.second(), DEC);
+  Serial.println(); 
 
   Open () ;// Функция открытия крышки
   delay(100);
@@ -54,14 +71,14 @@ void setup() {
  
 void loop() {
   // Пауза
-  if (millis() - timing > (long)30*60*1000){  
-    timing = millis(); 
+  if (millis() - my_timing > period_timing){
+    my_timing = millis();
     DateTime now = rtc.now();
     
     hourNow = now.hour(), DEC;
     Serial.println(hourNow);
   
-    if (hourNow > 6) {
+    if (hourNow > 8) {
       if ((long)millis() - my_timer > period_time) {
         my_timer = millis();   // "сбросить" таймер
         // набор функций, который хотим выполнить один раз за период
