@@ -71,14 +71,14 @@ void setup() {
  
 void loop() {
   // Пауза
-  if (millis() - my_timing > period_timing){
+  if ((long)millis() - my_timing > period_timing){
     my_timing = millis();
     DateTime now = rtc.now();
     
     hourNow = now.hour(), DEC;
     Serial.println(hourNow);
   
-    if (hourNow > 8) {
+    if (hourNow > 7) {
       if ((long)millis() - my_timer > period_time) {
         my_timer = millis();   // "сбросить" таймер
         // набор функций, который хотим выполнить один раз за период
