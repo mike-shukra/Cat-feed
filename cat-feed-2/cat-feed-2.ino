@@ -78,7 +78,7 @@ void loop() {
     hourNow = now.hour(), DEC;
     Serial.println(hourNow);
   
-    if (hourNow > 7) {
+    if (hourNow > 6) {
       if ((long)millis() - my_timer > period_time) {
         my_timer = millis();   // "сбросить" таймер
         // набор функций, который хотим выполнить один раз за период
