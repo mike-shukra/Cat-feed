@@ -8,22 +8,22 @@ char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 
 Servo servo1;         //объект сервопривод 
  
-int servoPIN = 6;     //контакт сервопривода
-int MOSFET_pin = 3;   // пин мосфета
+const uint8_t servoPIN = 6;     //контакт сервопривода
+const uint8_t MOSFET_pin = 3;   // пин мосфета
 
 // время между открытиями в мс = 12ч*60мин*60сек*1000
-unsigned long period_time = (long)3*60*60*1000; //3*60*60*1000
+uint32_t period_time = (long)3*60*60*1000; //3*60*60*1000
 // переменная таймера, максимально большой целочисленный тип (он же uint32_t)
-unsigned long my_timer;
+uint32_t my_timer;
 
-unsigned long my_timing; // Пауза
-unsigned long period_timing = (long)30*60*1000; //3*60*60*1000
+uint32_t my_timing; // Пауза
+uint32_t period_timing = (long)30*60*1000; //3*60*60*1000
 
-int Y0=0; //угол сервы в закрытом положении
-int Y1=20; //угол сервы в открытом положении
-int t=50; //приостановка в промежуточных положениях при открытии, мс (режим тряски)
+uint8_t Y0=0; //угол сервы в закрытом положении
+uint8_t Y1=20; //угол сервы в открытом положении
+uint8_t t=50; //приостановка в промежуточных положениях при открытии, мс (режим тряски)
 
-int hourNow;
+uint8_t hourNow;
 
 void setup() {
   Serial.begin(9600); //test последовательный порт для отображения данных
@@ -107,7 +107,7 @@ void Open() {
   delay(100);
 
   servo1.attach(servoPIN); // подкючаем сервопривод
-  int pos; // положение сервы
+  uint8_t pos; // положение сервы
 
 // цикл плавного открытия
   for(pos = Y0; pos < Y1; pos += 5) // шаг=угол
@@ -131,7 +131,7 @@ void Open() {
   }
 
 //цикл дополнительной тряски в конце
-  for(int i = 0; i <= 3; i += 1) //
+  for(uint8_t i = 0; i <= 3; i += 1) //
   {
     servo1.write(14);     // передвинься на следующую позицию
     delay(400);
