@@ -16,18 +16,17 @@ uint32_t period_time = (long)3*60*60*1000; //3*60*60*1000
 // переменная таймера, максимально большой целочисленный тип (он же uint32_t)
 uint32_t my_timer;
 
-uint32_t my_timing; // Пауза
 uint32_t period_timing = (long)30*60*1000; //3*60*60*1000
 
-uint8_t Y0=0; //угол сервы в закрытом положении
-uint8_t Y1=20; //угол сервы в открытом положении
-uint8_t t=50; //приостановка в промежуточных положениях при открытии, мс (режим тряски)
+const uint8_t Y0=0; //угол сервы в закрытом положении
+const uint32_t Y1=20; //угол сервы в открытом положении
+const uint32_t t=50; //приостановка в промежуточных положениях при открытии, мс (режим тряски)
 
-uint8_t hourNow;
+uint32_t hourNow;
 
 void setup() {
   Serial.begin(9600); //test последовательный порт для отображения данных
-  delay(3000); // wait for console opening
+  delay(1000); // wait for console opening
 
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
@@ -42,7 +41,7 @@ void setup() {
     // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
   }
 
-  pinMode(MOSFET_pin, OUTPUT); // пин реле как выход
+  pinMode(MOSFET_pin, OUTPUT); // пин мосфета как выход
 
   my_timer = millis();   // "сбросить" таймер
 
@@ -71,6 +70,7 @@ void setup() {
  
 void loop() {
   // Пауза
+  uint32_t my_timing; // Пауза
   if ((long)millis() - my_timing > period_timing){
     my_timing = millis();
     DateTime now = rtc.now();
@@ -107,7 +107,7 @@ void Open() {
   delay(100);
 
   servo1.attach(servoPIN); // подкючаем сервопривод
-  uint8_t pos; // положение сервы
+  int32_t pos; // положение сервы
 
 // цикл плавного открытия
   for(pos = Y0; pos < Y1; pos += 5) // шаг=угол
@@ -118,20 +118,23 @@ void Open() {
      delay(110);             // небольшой перерыв 
 
 //---- 
-
 // цикл зкрытия с потрясыванием
-  for(pos = Y1; pos >= Y0; pos -= 8) //шаг=угол
+  for(pos = Y1; pos > Y0; pos -= 5) //шаг=угол
   {                               
     servo1.write(pos);  // передвинься на следующую позицию
     delay(t);               // небольшой перерыв чтобы он успел передвинуться
+Serial.println(pos);
+Serial.println(Y1);
+Serial.println(Y0);
     servo1.write(pos-5);  // чуть призакроем
     delay(t);
     servo1.write(pos);  // передвинься на следующую позицию
     delay(t);  
   }
 
+
 //цикл дополнительной тряски в конце
-  for(uint8_t i = 0; i <= 3; i += 1) //
+  for(uint32_t i = 0; i <= 3; i += 1) //
   {
     servo1.write(14);     // передвинься на следующую позицию
     delay(400);
