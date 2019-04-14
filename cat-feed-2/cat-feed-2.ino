@@ -123,9 +123,9 @@ void Open() {
   {                               
     servo1.write(pos);  // передвинься на следующую позицию
     delay(t);               // небольшой перерыв чтобы он успел передвинуться
-Serial.println(pos);
-Serial.println(Y1);
-Serial.println(Y0);
+    
+    // Serial.println(pos);
+    
     servo1.write(pos-5);  // чуть призакроем
     delay(t);
     servo1.write(pos);  // передвинься на следующую позицию
@@ -139,7 +139,7 @@ Serial.println(Y0);
     servo1.write(14);     // передвинься на следующую позицию
     delay(400);
     servo1.write(Y0);     // повернись до уровня закрытия
-        delay(200);
+    delay(200);
   }
  //----
 
