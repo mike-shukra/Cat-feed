@@ -11,12 +11,16 @@ Servo servo1;         //объект сервопривод
 const uint8_t servoPIN = 6;     //контакт сервопривода
 const uint8_t MOSFET_pin = 3;   // пин мосфета
 
+
+uint32_t period_timing = 20000; //30*60*1000
 // время между открытиями в мс = 12ч*60мин*60сек*1000
-uint32_t period_time = (long)3*60*60*1000; //3*60*60*1000
+uint32_t period_time = 60000; //3*60*60*1000
 // переменная таймера, максимально большой целочисленный тип (он же uint32_t)
 uint32_t my_timer;
 
-uint32_t period_timing = (long)30*60*1000; //3*60*60*1000
+uint32_t my_timing; // Пауза
+
+
 
 const uint8_t Y0=0; //угол сервы в закрытом положении
 const uint32_t Y1=20; //угол сервы в открытом положении
@@ -44,7 +48,8 @@ void setup() {
   pinMode(MOSFET_pin, OUTPUT); // пин мосфета как выход
 
   my_timer = millis();   // "сбросить" таймер
-
+  my_timing = millis();   // "сбросить" таймер
+  
   Serial.println("setup"); 
   DateTime now = rtc.now();
     
@@ -63,27 +68,34 @@ void setup() {
   Serial.print(now.second(), DEC);
   Serial.println(); 
 
-  Open () ;// Функция открытия крышки
+  Open() ;// Открытие крышки
   delay(100);
 
 }
  
 void loop() {
   // Пауза
-  uint32_t my_timing; // Пауза
-  if ((long)millis() - my_timing > period_timing){
-    my_timing = millis();
+  
+
+  if (millis() - my_timing > period_timing){
+    my_timing = millis();   // "сбросить" таймер
     DateTime now = rtc.now();
     
     hourNow = now.hour(), DEC;
-    Serial.println(hourNow);
-  
+    //hourNow = 10;
+    //Serial.println(hourNow);
+
     if (hourNow > 6) {
-      if ((long)millis() - my_timer > period_time) {
+      
+      //Serial.println(millis());
+      //Serial.println(my_timer);
+      
+      if (millis() - my_timer > period_time) {
+        
         my_timer = millis();   // "сбросить" таймер
         // набор функций, который хотим выполнить один раз за период
-
-        Open () ;// Функция открытия крышки
+        
+        Open() ;// Открытие крышки
         delay(1000);
       }
     }
@@ -97,7 +109,7 @@ void loop() {
 
 ////////////////////////////////////////////////////////////////////
 
-//функция открытия крышки
+//Открытие крышки
 void Open() {
   Serial.println("function start");  
 
@@ -124,7 +136,7 @@ void Open() {
     servo1.write(pos);  // передвинься на следующую позицию
     delay(t);               // небольшой перерыв чтобы он успел передвинуться
     
-    // Serial.println(pos);
+    //Serial.println(pos);
     
     servo1.write(pos-5);  // чуть призакроем
     delay(t);
