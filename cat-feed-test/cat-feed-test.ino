@@ -12,11 +12,9 @@ const uint8_t servoPIN = 6;     //контакт сервопривода
 const uint8_t MOSFET_pin = 3;   // пин мосфета
 
 
-uint32_t period_timing = 30*60*1000; //30*60*1000
-// время между открытиями в мс = 12ч*60мин*60сек*1000
-uint32_t period_time = 3*60*60*1000; //3*60*60*1000
-// переменная таймера, максимально большой целочисленный тип (он же uint32_t)
-uint32_t my_timer;
+uint32_t period_timing = 20000; //30*60*1000 // интервал между открытиями в мс = 12ч*60мин*60сек*1000
+uint32_t period_time = 1000; //3*60*60*1000 // интервал проверок
+uint32_t my_timer; // переменная таймера, максимально большой целочисленный тип (он же uint32_t)
 
 uint32_t my_timing; // Пауза
 
@@ -77,27 +75,24 @@ void loop() {
   // Пауза
   
 
-  if (millis() - my_timing > period_timing){
+  if (millis() - my_timing > period_time){
     my_timing = millis();   // "сбросить" таймер
 
-    DateTime now = rtc.now();
-    hourNow = now.hour(), DEC;
-    //hourNow = 10;
-    //Serial.println(hourNow);
+    //DateTime now = rtc.now();
+    //hourNow = now.hour(), DEC;
+    hourNow = 10;
+    Serial.println(hourNow);
 
-    if (hourNow > 6) {
-      
-      //Serial.println(millis());
-      //Serial.println(my_timer);
-      
-      if (millis() - my_timer > period_time) {
+    if (hourNow > 6 && millis() - my_timer > period_timing) {
+
+	  Serial.println(millis());
+      Serial.println(my_timer);
+
+      my_timer = millis();   // "сбросить" таймер
+      // набор функций, который хотим выполнить один раз за период
         
-        my_timer = millis();   // "сбросить" таймер
-        // набор функций, который хотим выполнить один раз за период
-        
-        Open() ;// Открытие крышки
-        delay(1000);
-      }
+      Open() ;// Открытие крышки
+      delay(1000);
     }
   }
  
