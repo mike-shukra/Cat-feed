@@ -10,6 +10,7 @@ Servo servo1;         //объект сервопривод
  
 const uint8_t servoPIN = 6;     //контакт сервопривода
 const uint8_t MOSFET_pin = 3;   // пин мосфета
+const int buttonPin = 2;     // номер входа, подключенный к кнопке
 
 
 uint32_t period_timing = 30*60*1000; //30*60*1000
@@ -20,10 +21,12 @@ uint32_t my_timer;
 
 uint32_t my_timing; // Пауза
 
+uint32_t previousMillis = 0;
+int val = 0;
 
 
 const uint8_t Y0=0; //угол сервы в закрытом положении
-const uint32_t Y1=24; //угол сервы в открытом положении
+const uint32_t Y1=27; //угол сервы в открытом положении
 const uint32_t t=50; //приостановка в промежуточных положениях при открытии, мс (режим тряски)
 
 uint32_t hourNow;
@@ -44,11 +47,14 @@ void setup() {
     // January 21, 2014 at 3am you would call:
     // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
   }
-
+  
+  pinMode(buttonPin, INPUT);  // инициализируем пин, подключенный к кнопке, как вход
+  
   pinMode(MOSFET_pin, OUTPUT); // пин мосфета как выход
 
   my_timer = millis();   // "сбросить" таймер
   my_timing = millis();   // "сбросить" таймер
+  previousMillis = millis();
   
   Serial.println("setup"); 
   DateTime now = rtc.now();
@@ -68,15 +74,21 @@ void setup() {
   Serial.print(now.second(), DEC);
   Serial.println(); 
 
-  Open() ;// Открытие крышки
+  Open();// Открытие крышки
   delay(100);
 
 }
  
 void loop() {
-  // Пауза
-  
+   // Пауза
+   //Serial.println("Test");  
 
+   if(digitalRead(buttonPin) == HIGH) { 
+       Serial.println("ButtonP");  
+       Open();
+     }
+
+  
   if (millis() - my_timing > period_timing){
     my_timing = millis();   // "сбросить" таймер
 
@@ -102,7 +114,7 @@ void loop() {
   }
  
 
-  delay(1000);
+  delay(100);
 
 
 } //loop
