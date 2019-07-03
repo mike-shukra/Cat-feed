@@ -12,10 +12,14 @@ const uint8_t servoPIN = 6;     //контакт сервопривода
 const uint8_t MOSFET_pin = 3;   // пин мосфета
 const int buttonPin = 2;     // номер входа, подключенный к кнопке
 
+//интервал проверки времени
+//30*60*1000
+uint32_t period_timing = 30*60*1000; 
 
-uint32_t period_timing = 30*60*1000; //30*60*1000
 // время между открытиями в мс = 12ч*60мин*60сек*1000
-uint32_t period_time = 3*60*60*1000; //3*60*60*1000
+//2*60*60*1000
+uint32_t period_time = 7200000; 
+
 // переменная таймера, максимально большой целочисленный тип (он же uint32_t)
 uint32_t my_timer;
 
@@ -33,7 +37,7 @@ uint32_t hourNow;
 
 void setup() {
   Serial.begin(9600); //test последовательный порт для отображения данных
-  delay(1000); // wait for console opening
+  delay(100); // wait for console opening
 
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
@@ -94,13 +98,14 @@ void loop() {
 
     DateTime now = rtc.now();
     hourNow = now.hour(), DEC;
-    //hourNow = 10;
-    //Serial.println(hourNow);
+    //hourNow = 4;
+    Serial.println(hourNow);
 
     if (hourNow > 6) {
       
-      //Serial.println(millis());
-      //Serial.println(my_timer);
+      Serial.println(millis());
+      Serial.println(my_timer);
+      Serial.println(period_time);
       
       if (millis() - my_timer > period_time) {
         
@@ -108,7 +113,7 @@ void loop() {
         // набор функций, который хотим выполнить один раз за период
         
         Open() ;// Открытие крышки
-        delay(1000);
+        delay(100);
       }
     }
   }
